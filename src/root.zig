@@ -1,4 +1,5 @@
 const std = @import("std");
+const lis = @import("lis.zig");
 
 pub fn bufferedPrint() !void {
     const stdout_file = std.io.getStdOut().writer();
@@ -16,4 +17,8 @@ pub fn add(a: i32, b: i32) i32 {
 
 test "basic add functionality" {
     try std.testing.expect(add(3, 7) == 10);
+}
+
+test {
+    _ = lis;
 }
