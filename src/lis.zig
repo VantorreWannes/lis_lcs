@@ -67,44 +67,44 @@ pub fn longestIncreasingSubsequence(
 }
 
 test "empty slice" {
-    const input: []const u32 = &.{};
+    const input: []const u32 = &[_]u32{};
     const result = try longestIncreasingSubsequence(u32, testing.allocator, input);
     defer testing.allocator.free(result);
     try testing.expectEqualSlices(u32, &.{}, result);
 }
 
 test "single element" {
-    const input: []const u32 = &.{42};
+    const input: []const u32 = &[_]u32{42};
     const result = try longestIncreasingSubsequence(u32, testing.allocator, input);
     defer testing.allocator.free(result);
     try testing.expectEqualSlices(u32, &.{42}, result);
 }
 
 test "already sorted" {
-    const input: []const u32 = &.{ 1, 2, 3, 4, 5 };
+    const input: []const u32 = &[_]u32{ 1, 2, 3, 4, 5 };
     const result = try longestIncreasingSubsequence(u32, testing.allocator, input);
     defer testing.allocator.free(result);
     try testing.expectEqualSlices(u32, &.{ 1, 2, 3, 4, 5 }, result);
 }
 
 test "reverse sorted" {
-    const input: []const i32 = &.{ 5, 4, 3, 2, 1 };
+    const input: []const i32 = &[_]i32{ 5, 4, 3, 2, 1 };
     const result = try longestIncreasingSubsequence(i32, testing.allocator, input);
     defer testing.allocator.free(result);
     try testing.expectEqualSlices(i32, &.{1}, result);
 }
 
 test "general case from wikipedia" {
-    const input: []const u32 = &.{ 0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15 };
-    const expected: []const u32 = &.{ 0, 2, 6, 9, 11, 15 };
+    const input: []const u32 = &[_]u32{ 0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15 };
+    const expected: []const u32 = &[_]u32{ 0, 2, 6, 9, 11, 15 };
     const result = try longestIncreasingSubsequence(u32, testing.allocator, input);
     defer testing.allocator.free(result);
     try testing.expectEqualSlices(u32, expected, result);
 }
 
 test "with duplicates" {
-    const input: []const u32 = &.{ 3, 4, 4, 1, 5, 2, 6 };
-    const expected: []const u32 = &.{ 3, 4, 5, 6 };
+    const input: []const u32 = &[_]u32{ 3, 4, 4, 1, 5, 2, 6 };
+    const expected: []const u32 = &[_]u32{ 3, 4, 5, 6 };
     const result = try longestIncreasingSubsequence(u32, testing.allocator, input);
     defer testing.allocator.free(result);
     try testing.expectEqualSlices(u32, expected, result);
