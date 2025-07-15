@@ -1,0 +1,12 @@
+.{
+    .name = .lis_lcs,
+    .version = "0.0.0",
+    .fingerprint = 0x158c0830b6579705, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.15.0-dev.919+044ccf413",
+    .dependencies = .{},
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
