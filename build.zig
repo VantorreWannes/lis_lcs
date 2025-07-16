@@ -9,6 +9,8 @@ pub fn build(b: *std.Build) void {
         .target = target,
     });
 
+    const use_llvm = b.option(bool, "llvm", "Use the LLVM backend");
+
     const exe = b.addExecutable(.{
         .name = "lis_lcs",
         .root_module = b.createModule(.{
@@ -19,6 +21,7 @@ pub fn build(b: *std.Build) void {
                 .{ .name = "lis_lcs", .module = mod },
             },
         }),
+        .use_llvm = use_llvm,
     });
 
     b.installArtifact(exe);
@@ -36,18 +39,21 @@ pub fn build(b: *std.Build) void {
 
     const mod_tests = b.addTest(.{
         .root_module = mod,
+        .use_llvm = use_llvm,
     });
 
     const run_mod_tests = b.addRunArtifact(mod_tests);
+    const install_mod_tests = b.addInstallArtifact(mod_tests, .{});
 
     const exe_tests = b.addTest(.{
         .root_module = exe.root_module,
+        .use_llvm = use_llvm,
     });
-
+    
     const run_exe_tests = b.addRunArtifact(exe_tests);
-
+    
     const test_step = b.step("test", "Run tests");
     test_step.dependOn(&run_mod_tests.step);
     test_step.dependOn(&run_exe_tests.step);
-
+    test_step.dependOn(&install_mod_tests.step);
 }
