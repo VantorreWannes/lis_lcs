@@ -1,5 +1,6 @@
 const std = @import("std");
-const lis = @import("lis.zig");
+pub const lis = @import("lis.zig");
+pub const lcs = @import("lcs.zig");
 
 pub fn bufferedPrint() !void {
     const stdout_file = std.io.getStdOut().writer();
@@ -21,4 +22,5 @@ test "basic add functionality" {
 
 test {
     _ = lis;
+    _ = lcs;
 }
