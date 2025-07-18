@@ -38,9 +38,29 @@ fn sliceIndexes(comptime T: type, allocator: std.mem.Allocator, slice: []const T
 fn deinitSliceIndexes(comptime T: type, indexes: *std.AutoHashMap(T, std.ArrayList(usize))) void {
     var iterator = indexes.valueIterator();
     while (iterator.next()) |value| value.deinit();
-    indexes.deinit(); 
+    indexes.deinit();
 }
 
+/// Computes the longest common subsequence (LCS) between two slices.
+///
+/// The LCS is the longest subsequence that is present in both input slices.
+/// This implementation uses an algorithm that reduces the LCS problem to the
+/// Longest Increasing Subsequence (LIS) problem, which is efficient for
+/// cases where the alphabet of the slices is small or when there are few
+/// common elements.
+///
+/// # Parameters
+///
+/// - `T`: The type of elements in the slices. Must be comparable.
+/// - `allocator`: The memory allocator to use for intermediate and result allocations.
+/// - `source`: The first slice.
+/// - `target`: The second slice.
+///
+/// # Returns
+///
+/// A new slice containing the longest common subsequence, allocated by `allocator`.
+/// The caller is responsible for freeing this memory.
+/// Returns an error if memory allocation fails.
 pub fn longestCommonSubsequence(
     comptime T: type,
     allocator: std.mem.Allocator,

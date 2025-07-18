@@ -74,7 +74,7 @@ pub fn main() !void {
                 .{ length, alphabet_size },
             );
             const benchmark = LongestCommonSubsequenceBenchmark(length, alphabet_size).init(&random);
-            try bench.addParam(name, &benchmark, .{.time_budget_ns = 20_000_000 * (length * 3)});
+            try bench.addParam(name, &benchmark, .{ .time_budget_ns = 20_000_000 * (length * 3) });
         }
     }
 
@@ -85,7 +85,7 @@ pub fn main() !void {
                 .{ length, alphabet_size },
             );
             const benchmark = LongestIncreasingSubsequenceBenchmark(length, alphabet_size).init(&random);
-            try bench.addParam(name, &benchmark, .{.time_budget_ns = 20_000_000 * length});
+            try bench.addParam(name, &benchmark, .{ .time_budget_ns = 20_000_000 * length });
         }
     }
 

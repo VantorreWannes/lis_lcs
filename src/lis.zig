@@ -3,6 +3,24 @@ const testing = std.testing;
 
 const NO_PREDECESSORS = std.math.maxInt(usize);
 
+/// Finds the longest increasing subsequence in a slice of elements.
+///
+/// An increasing subsequence is a sequence of elements from the input slice
+/// that are in increasing order. This function finds the longest such subsequence.
+/// The algorithm used is a variation of Patience sorting, which has a time
+/// complexity of O(n log n), where n is the length of the input slice.
+///
+/// # Parameters
+///
+/// - `T`: The type of elements in the slice. Must be an ordered type.
+/// - `allocator`: The memory allocator to use for intermediate and result allocations.
+/// - `input`: The slice to find the LIS from.
+///
+/// # Returns
+///
+/// A new slice containing the longest increasing subsequence, allocated by `allocator`.
+/// The caller is responsible for freeing this memory.
+/// Returns an error if memory allocation fails.
 pub fn longestIncreasingSubsequence(
     comptime T: type,
     allocator: std.mem.Allocator,
