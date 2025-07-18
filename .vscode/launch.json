@@ -17,7 +17,7 @@
                 "type": "lldb",
                 "request": "launch",
                 "name": "Debug Zig Test",
-                "program": "${workspaceFolder}/zig-out/bin/test",
+                "program": "${workspaceFolder}/zig-out/bin/root_tests",
                 "args": [],
                 "cwd": "${workspaceFolder}",
                 "preLaunchTask": "Build Zig Test (prompt for filter)",
