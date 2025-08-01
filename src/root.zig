@@ -10,10 +10,12 @@ const lcs = @import("lcs.zig");
 
 /// See `lcs.zig` for documentation.
 pub const longestCommonSubsequence = lcs.longestCommonSubsequence;
+
 /// See `lis.zig` for documentation.
 pub const longestIncreasingSubsequence = lis.longestIncreasingSubsequence;
+pub const LongestIncreasingSubsequenceError = lis.LongestIncreasingSubsequenceError;
 
 test {
-    _ = lis;
-    _ = lcs;
+    std.testing.refAllDecls(lis);
+    std.testing.refAllDecls(lcs);
 }
