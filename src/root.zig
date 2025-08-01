@@ -10,6 +10,7 @@ const lcs = @import("lcs.zig");
 
 /// See `lcs.zig` for documentation.
 pub const longestCommonSubsequence = lcs.longestCommonSubsequence;
+pub const LongestCommonSubsequenceError = lcs.LongestCommonSubsequenceError;
 
 /// See `lis.zig` for documentation.
 pub const longestIncreasingSubsequence = lis.longestIncreasingSubsequence;
