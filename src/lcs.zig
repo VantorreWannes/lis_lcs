@@ -2,7 +2,11 @@ const std = @import("std");
 const lis = @import("lis.zig");
 const testing = std.testing;
 
-fn sliceCounts(comptime T: type, allocator: std.mem.Allocator, slice: []const T) !std.AutoHashMap(T, usize) {
+pub const LongestCommonSubsequenceError = error{
+    OutOfMemory,
+} || lis.LongestIncreasingSubsequenceError;
+
+fn sliceCounts(comptime T: type, allocator: std.mem.Allocator, slice: []const T) LongestCommonSubsequenceError!std.AutoHashMap(T, usize) {
     var counts = std.AutoHashMap(T, usize).init(allocator);
     errdefer counts.deinit();
     for (slice) |value| {
@@ -12,7 +16,7 @@ fn sliceCounts(comptime T: type, allocator: std.mem.Allocator, slice: []const T)
     return counts;
 }
 
-fn sliceIndexes(comptime T: type, allocator: std.mem.Allocator, slice: []const T) !std.AutoHashMap(T, std.ArrayList(usize)) {
+fn sliceIndexes(comptime T: type, allocator: std.mem.Allocator, slice: []const T) LongestCommonSubsequenceError!std.AutoHashMap(T, std.ArrayList(usize)) {
     var counts = try sliceCounts(T, allocator, slice);
     defer counts.deinit();
     var indexes = std.AutoHashMap(T, std.ArrayList(usize)).init(allocator);
@@ -66,7 +70,7 @@ pub fn longestCommonSubsequence(
     allocator: std.mem.Allocator,
     source: []const T,
     target: []const T,
-) ![]T {
+) LongestCommonSubsequenceError![]T {
     if (source.len == 0 or target.len == 0) {
         return try allocator.alloc(T, 0);
     }

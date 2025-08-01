@@ -3,6 +3,10 @@ const testing = std.testing;
 
 const NO_PREDECESSORS = std.math.maxInt(usize);
 
+pub const LongestIncreasingSubsequenceError = error{
+    OutOfMemory,
+};
+
 /// Finds the longest increasing subsequence in a slice of elements.
 ///
 /// An increasing subsequence is a sequence of elements from the input slice
@@ -25,9 +29,9 @@ pub fn longestIncreasingSubsequence(
     comptime T: type,
     allocator: std.mem.Allocator,
     input: []const T,
-) ![]T {
+) LongestIncreasingSubsequenceError![]T {
     if (input.len == 0) {
-        return &[0]T{};
+        return try allocator.alloc(T, 0);
     }
 
     var tails = std.ArrayList(T).init(allocator);
@@ -67,7 +71,7 @@ pub fn longestIncreasingSubsequence(
 
     const lis_len = tails.items.len;
     if (lis_len == 0) {
-        return &[0]T{};
+        return try allocator.alloc(T,0);
     }
 
     const result = try allocator.alloc(T, lis_len);
