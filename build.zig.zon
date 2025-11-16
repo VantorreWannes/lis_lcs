@@ -1,17 +1,17 @@
 .{
     .name = .lis_lcs,
-    .version = "0.0.0",
-    .fingerprint = 0x158c0830b6579705, // Changing this has security and trust implications.
-    .minimum_zig_version = "0.15.0-dev.919+044ccf413",
+    .version = "0.0.1",
     .dependencies = .{
         .zbench = .{
-            .url = "git+https://github.com/hendriknielaender/zBench.git#c64bb43a3e32c5c62c02058ad7247e072301708d",
-            .hash = "zbench-0.10.0-YTdc714iAQDO4lTHMnIljYHPZ5v_sNTsw75vAmO1pyT-",
+            .url = "git+https://github.com/hendriknielaender/zBench.git#3268a23da82231f1bd2c064de7fdf6fb7056126f",
+            .hash = "zbench-0.11.2-YTdc7zolAQDlBF9i0ywXIvDjafL3Kg27S-aFUq6dU5zy",
         },
     },
+    .minimum_zig_version = "0.15.2",
     .paths = .{
         "build.zig",
         "build.zig.zon",
         "src",
     },
+    .fingerprint = 0x158c0830bde4e3e7,
 }

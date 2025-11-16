@@ -20,28 +20,28 @@ fn sliceIndexes(comptime T: type, allocator: std.mem.Allocator, slice: []const T
     var counts = try sliceCounts(T, allocator, slice);
     defer counts.deinit();
     var indexes = std.AutoHashMap(T, std.ArrayList(usize)).init(allocator);
-    errdefer deinitSliceIndexes(T, &indexes);
+    errdefer deinitSliceIndexes(T, allocator, &indexes);
 
     var key_it = counts.keyIterator();
     while (key_it.next()) |key| {
         const value = key.*;
         const count = counts.get(value).?;
-        const value_indexes = try std.ArrayList(usize).initCapacity(allocator, count);
-        errdefer value_indexes.deinit();
+        var value_indexes = try std.ArrayList(usize).initCapacity(allocator, count);
+        errdefer value_indexes.deinit(allocator);
         try indexes.put(value, value_indexes);
     }
 
     for (slice, 0..) |value, index| {
         var value_indexes_ptr = indexes.getPtr(value).?;
-        try value_indexes_ptr.append(index);
+        try value_indexes_ptr.append(allocator, index);
     }
 
     return indexes;
 }
 
-fn deinitSliceIndexes(comptime T: type, indexes: *std.AutoHashMap(T, std.ArrayList(usize))) void {
+fn deinitSliceIndexes(comptime T: type, allocator: std.mem.Allocator, indexes: *std.AutoHashMap(T, std.ArrayList(usize))) void {
     var iterator = indexes.valueIterator();
-    while (iterator.next()) |value| value.deinit();
+    while (iterator.next()) |value| value.deinit(allocator);
     indexes.deinit();
 }
 
@@ -76,17 +76,17 @@ pub fn longestCommonSubsequence(
     }
 
     var target_indexes = try sliceIndexes(T, allocator, target);
-    defer deinitSliceIndexes(T, &target_indexes);
+    defer deinitSliceIndexes(T, allocator, &target_indexes);
 
-    var intermediate = std.ArrayList(usize).init(allocator);
-    defer intermediate.deinit();
+    var intermediate: std.ArrayList(usize) = .empty;
+    defer intermediate.deinit(allocator);
 
     for (source) |value| {
         if (target_indexes.get(value)) |indices| {
             var i: usize = indices.items.len;
             while (i > 0) {
                 i -= 1;
-                try intermediate.append(indices.items[i]);
+                try intermediate.append(allocator, indices.items[i]);
             }
         }
     }
@@ -115,9 +115,10 @@ test sliceCounts {
 }
 
 test sliceIndexes {
+    const allocator = testing.allocator;
     const slice: []const u32 = &[_]u32{ 1, 2, 2, 3, 3, 3 };
-    var result = try sliceIndexes(u32, testing.allocator, slice);
-    defer deinitSliceIndexes(u32, &result);
+    var result = try sliceIndexes(u32, allocator, slice);
+    defer deinitSliceIndexes(u32, allocator, &result);
     try testing.expectEqual(result.get(0), null);
 
     const indexes1 = result.get(1).?;
@@ -131,9 +132,10 @@ test sliceIndexes {
 }
 
 test "sliceIndexes empty slice" {
+    const allocator = testing.allocator;
     const slice: []const u32 = &[_]u32{};
-    var result = try sliceIndexes(u32, testing.allocator, slice);
-    defer deinitSliceIndexes(u32, &result);
+    var result = try sliceIndexes(u32, allocator, slice);
+    defer deinitSliceIndexes(u32, allocator, &result);
     try testing.expectEqual(@as(usize, 0), result.count());
 }
 
