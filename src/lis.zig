@@ -34,11 +34,11 @@ pub fn longestIncreasingSubsequence(
         return try allocator.alloc(T, 0);
     }
 
-    var tails = std.ArrayList(T).init(allocator);
-    defer tails.deinit();
+    var tails: std.ArrayList(T) = .empty;
+    defer tails.deinit(allocator);
 
-    var lis_indices = std.ArrayList(usize).init(allocator);
-    defer lis_indices.deinit();
+    var lis_indices: std.ArrayList(usize) = .empty;
+    defer lis_indices.deinit(allocator);
 
     var predecessors = try allocator.alloc(usize, input.len);
     defer allocator.free(predecessors);
@@ -61,8 +61,8 @@ pub fn longestIncreasingSubsequence(
         }
 
         if (tails_index == tails.items.len) {
-            try tails.append(num);
-            try lis_indices.append(input_index);
+            try tails.append(allocator, num);
+            try lis_indices.append(allocator, input_index);
         } else {
             tails.items[tails_index] = num;
             lis_indices.items[tails_index] = input_index;
@@ -71,7 +71,7 @@ pub fn longestIncreasingSubsequence(
 
     const lis_len = tails.items.len;
     if (lis_len == 0) {
-        return try allocator.alloc(T,0);
+        return try allocator.alloc(T, 0);
     }
 
     const result = try allocator.alloc(T, lis_len);

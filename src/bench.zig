@@ -55,7 +55,10 @@ pub fn main() !void {
     var prng = std.Random.DefaultPrng.init(std.testing.random_seed);
     var random = prng.random();
 
-    const stdout = std.io.getStdOut().writer();
+    const stdout = std.fs.File.stdout();
+
+    var buffer: [1024]u8 = undefined;
+    var buffered_writer = stdout.writer(&buffer);
 
     var gpa = std.heap.GeneralPurposeAllocator(.{}).init;
     defer _ = gpa.deinit();
@@ -89,6 +92,6 @@ pub fn main() !void {
         }
     }
 
-    try stdout.writeAll("\n");
-    try bench.run(stdout);
+    try buffered_writer.interface.writeAll("\n");
+    try bench.run(&buffered_writer.interface);
 }
